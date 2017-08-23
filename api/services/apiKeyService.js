@@ -3,7 +3,7 @@
  */
 
 module.exports = {
-  //more details will be added
+  //more details will be added i.e email scope etc
   encryptApiKey:function(email,scope){
   var key ;
   //TODO: remove the next line

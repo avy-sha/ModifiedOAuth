@@ -20,8 +20,8 @@ module.exports = {
 
     //TODO: Notify the frontend to tell the user that the allotted api key will be only displayed once per email(and once scopes allotted cannot be changed for a specific email)
 
-    var key = apikeyService.encryptApiKey(scope, email);
-    Users.findOne({email: email}, function (err, user) {
+    var key = apiKeyService.encryptApiKey(scope, email);
+    User.findOne({email: email}, function (err, user) {
 
       if (err) {
         console.log(err);
@@ -32,6 +32,7 @@ module.exports = {
         return res.status(409).json({err: "conflict:User already exists"});
       }
       else {
+        user = {};
         user.email = email;
         user.scope = scope;
         user.key = key;
