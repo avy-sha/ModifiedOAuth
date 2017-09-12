@@ -1,5 +1,5 @@
 {
-  "name": "ModifiedOAuth",
+  "name": "controller",
   "private": true,
   "version": "0.0.0",
   "description": "a Sails application",
@@ -19,11 +19,9 @@
     "grunt-sails-linker": "~0.10.1",
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
-    "jsonwebtoken": "^8.0.1",
     "rc": "1.0.1",
     "sails": "~0.12.13",
-    "sails-disk": "~0.10.9",
-    "sails-dynamodb": "^0.12.5"
+    "sails-disk": "~0.10.9"
   },
   "scripts": {
     "debug": "node debug app.js",
@@ -32,8 +30,8 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/abhinav/ModifiedOAuth.git"
+    "url": "git://github.com/anonymous node/sails user/controller.git"
   },
-  "author": "abhinav",
+  "author": "anonymous node/sails user",
   "license": ""
 }

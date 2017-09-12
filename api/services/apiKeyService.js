@@ -7,7 +7,8 @@ module.exports = {
   encryptApiKey:function(email,scope){
   var key ;
   //TODO: remove the next line
-  var testkey = "sdvehgfjhf786e73269jdcbuh79wet7fvyefyv";key=testkey;
+  var testkey = "sdvehgfjhf786e73269jdcbuh79wet7fvyefyv";
+  key=testkey;
     return key;
   },
   decryptApiKey:function(key){

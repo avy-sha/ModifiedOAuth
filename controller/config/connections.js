@@ -32,13 +32,6 @@ module.exports.connections = {
     adapter: 'sails-disk'
   },
 
-  dynamoDB:{
-    adapter:'sails-dynamodb',
-    accessKeyId:"AKIAIHC5IP4SVVFFNZOQ",
-    secretAccessKey:"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",
-    region:'us-east-1'
-  }
-
   /***************************************************************************
   *                                                                          *
   * MySQL is the world's most popular relational database.                   *

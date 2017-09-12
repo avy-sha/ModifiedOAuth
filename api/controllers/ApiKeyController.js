@@ -36,11 +36,11 @@ module.exports = {
         user.email = email;
         user.scope = scope;
         user.key = key;
-        user.save(function (err) {
+      /*  user.save(function (err) {
           if (err)
             return res.serverError(err);
           console.log('new user has been created');
-        });
+        });*/
         res.status(200).json({email: email, scope: scope, key: key});
       }
 

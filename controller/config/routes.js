@@ -34,16 +34,7 @@ module.exports.routes = {
 
   '/': {
     view: 'homepage'
-  },
-  'POST /getKey': {
-    controller: 'ApiKey',
-    action: 'generateApiKey'
-  },
-  'POST /auth': {
-    controller: 'Client',
-    action: 'auth'
   }
-
 
   /***************************************************************************
   *                                                                          *
