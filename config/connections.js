@@ -34,8 +34,8 @@ module.exports.connections = {
 
   dynamoDB:{
     adapter:'sails-dynamodb',
-    accessKeyId:"AKIAIHC5IP4SVVFFNZOQ",
-    secretAccessKey:"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",
+    accessKeyId:"",
+    secretAccessKey:"",
     region:'us-east-1'
   }
 
