@@ -7,7 +7,7 @@
 
 var
   jwt = require('jsonwebtoken'),
-  tokenSecret = "hailall"; //
+  tokenSecret = "hailall";
 
 // Generates a token from supplied payload
 /**
@@ -16,12 +16,11 @@ var
  * @returns {object} returns a signed JSON Web Token with an expiration time of 8 hours.
  */
 module.exports.issue = function(payload) {
+ payload.iat = Date.now();
+ payload.exp = payload.iat+86400000;
   return jwt.sign(
     payload,
-    tokenSecret, // Token Secret that we sign it with
-    {
-      expiresIn: 28800 //8hours Token Expire time
-    }
+    tokenSecret
   );
 };
 /**
@@ -30,11 +29,34 @@ module.exports.issue = function(payload) {
  * @param {object} callback - any callback which is to be called after verification.
  */
 // Verifies token on a request
-module.exports.verify = function(token, callback) {
-  return jwt.verify(
-    token, // The token to be verified
-    tokenSecret, // Same token we used to sign
-    {}, // No Option, for more see https://github.com/auth0/node-jsonwebtoken#jwtverifytoken-secretorpublickey-options-callback
-    callback //Pass errors or decoded token to callback
+module.exports.verify = function(req,token, callback) {
+  var token;
+ // callback(new Error({err: 'Format is Authorization: Bearer [token]'}));
+
+  if (req.headers && req.headers.authorization) {
+    var parts = req.headers.authorization.split(' ');
+    if (parts.length == 2) {
+      var scheme = parts[0],
+        credentials = parts[1];
+
+      if (/^Bearer$/i.test(scheme)) {
+        token = credentials;
+      }
+    } else {
+       return callback('Format is Authorization: Bearer [token]');
+    }
+  } else if (req.param('token')) {
+    token = req.param('token');
+    // We delete the token from param to not mess with blueprints
+    delete req.query.token;
+
+  } else {
+    return callback('Format is Authorization: Bearer [token]');
+  }
+ jwt.verify(token, tokenSecret, {}, function(err,token){
+    if (err) return callback('invalid Token');
+    //console.log(token);
+    return callback("",token);
+    }//Pass errors or decoded token to callback
   );
 };

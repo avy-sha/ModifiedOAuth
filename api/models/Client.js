@@ -8,11 +8,39 @@
 module.exports = {
 
   attributes: {
+    userId:{
+      primaryKey: 'hash',
+      type: 'string',
+      required: true
+    },
+    name:{
+      type:'string'
+    },
     scopes:{
       type: 'string',
       required: true,
-      enum: ["admin","executive","user"]
+      enum: ["admin","exec","basic"]
     },
+    redirectURI:{
+      type: 'string',
+      required: true
+    },
+    domain:{
+      type: 'string',
+      required: true
+    },
+    clientId:{
+      type: 'string',
+      required: true
+    },
+    clientSecret:{
+      type: 'string',
+      required: true
+    },
+    privateURI:{
+      type: 'string'
+    }
+
   }
 };
 

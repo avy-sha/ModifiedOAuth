@@ -4,46 +4,105 @@
  * @description :: Server-side logic for managing Clients
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var bcrypt = require('bcrypt');
 
 module.exports = {
 
-  auth: function(req, res) {
-
-    var userId = req.param('userId');
-    var password = req.param('password');
-
-    if (!userId || !password) {
-      return res.json(401, { err: 'email and password required' });
-    }
-
-    User.findOne({ userId: userId }, function(err, user) {
-      if (!user) {
-        return res.json(401, { err: 'user not registered' });
+  register: function (req, res) {
+    jwtService.verify(req, res, function (err, token) {
+      if (err) {
+        return res.json({err: err});
       }
+      var userId = token.id;
+      var name = req.param("appName");
+      var domain = req.param("domain");
+      var type = req.param("type"); //enum type web app or user agent....
+      var scopes = req.param("scopes");
+      var redirectURI = req.param("redirectURI");
 
-      User.comparePassword(password, user, function(err, valid) {
-        if (err) {
-          return res.json(403, { err: 'forbidden' });
-        }
+      if (!redirectURI)
+        return res.json({err: "RedirectURI is necessary!!"});
 
-        if (!valid) {
-          return res.json(401, { err: 'invalid email or password' });
-        } else {
+      if (extractHostname(redirectURI) != domain) {
+        return res.json({err: "RedirectURI should be of same domain"});
+      }
+      if (type == "public" || type == "private") {
+        Client.findOne({userId: userId}).exec(function (err, client) {
 
-          res.json({
-            token: jwtService.issue({ id: user.email })});
-        }
-      });
-    })
-  },
+          if (err) {
+            console.log(err);
+            return res.serverError(err);
+          }
+          if(client){
+            return res.status(409).json({err:"the user already has a project"});
+          }
+          client = {};
+          client.userId = userId;
+          client.scopes = scopes;
+          client.name = name;
+          client.domain = domain;
+          client.redirectURI = redirectURI;
 
-  register : function( req , res ) {
-    var name = req.param("name");
-    var type = req.param("type"); //enum type web app or user agent....
-    var scopes = req.param("scopes");
-    var redirectURI = req.param("redirectURI");
-
+          bcrypt.genSalt(10, function (err, salt) {
+            bcrypt.hash(Date.now().toString() + "OSKbLgJ/C5XRj/", salt, function (err, clientId) {
+              client.clientId = clientId;
+              bcrypt.genSalt(12, function (err, salt) {
+                bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "OSKbPIYzdbFiXRj/", salt, function (err, clientSecret) {
+                  client.clientId = clientId;
+                  client.clientSecret = clientSecret;
+                  if (type == "public") {
+                    Client.create(client).exec(function (err, Client) {
+                      if (err) {
+                        console.log(err);
+                        return res.serverError(err);
+                      }
+                      res.status(200).json({
+                        userId: userId,
+                        scopes: scopes,
+                        clientId: clientId,
+                        clientSecret: clientSecret
+                      });
+                    });
+                  }
+                  else if (type == "private") {
+                    bcrypt.genSalt(12, function (err, salt) {
+                      bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "O23@bPIYzdbFiXRj/", salt, function (err, privateURI) {
+                        client.privateURI = privateURI;
+                        Client.create(client).exec(function (err, Client) {
+                          if (err) {
+                            console.log(err);
+                            return res.serverError(err);
+                          }
+                          res.status(200).json({
+                            userId: userId,
+                            scopes: scopes,
+                            clientId: clientId,
+                            clientSecret: clientSecret,
+                            privateURI: privateURI
+                          });
+                        });
+                      })
+                    })
+                  }
+                });
+              })
+            })
+          })
+        })
+      }
+    });
   }
-
 };
 
+function extractHostname(url) {
+  var hostname;
+  if (url.indexOf("://") > -1) {
+    hostname = url.split('/')[2];
+  }
+  else {
+    hostname = url.split('/')[0];
+  }
+  hostname = hostname.split(':')[0];
+  hostname = hostname.split('?')[0];
+  return hostname;
+}
