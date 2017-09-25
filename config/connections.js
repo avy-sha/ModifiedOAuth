@@ -18,7 +18,7 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
-
+var conf = require('./conf.json');
 module.exports.connections = {
 
   /***************************************************************************
@@ -34,8 +34,8 @@ module.exports.connections = {
 
   dynamoDB:{
     adapter:'sails-dynamodb',
-    accessKeyId:"",
-    secretAccessKey:"",
+    accessKeyId:conf.id,
+    secretAccessKey:conf.secret,
     region:'us-east-1'
   }
 
