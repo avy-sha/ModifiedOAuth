@@ -33,9 +33,9 @@ module.exports = {
             console.log(err);
             return res.serverError(err);
           }
-          if(client){
+          /*if(client){
             return res.status(409).json({err:"the user already has a project"});
-          }
+          }*/
           client = {};
           client.userId = userId;
           client.scopes = scopes;
