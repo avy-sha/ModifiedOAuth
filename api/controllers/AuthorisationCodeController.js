@@ -4,13 +4,14 @@
  * @description :: Server-side logic for managing authorisation codes
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
+var conf = require('../../config/conf.json');
 
 module.exports = {
 
   getCodeAuth:function(req,res){
     var clientId = req.param("clientId");
     var redirectURI = req.param("redirectURI");
-    return res.view('resourceownerAuthentication',{clientId:clientId,redirectURI:redirectURI});
+    return res.view('resourceownerAuthentication',{clientId:clientId,redirectURI:redirectURI,domain:conf.domain});
   },
   //Only for authorisation code grant.
   requestPermission:function (req,res){
@@ -21,7 +22,7 @@ module.exports = {
         if (err) {
           return res.json({err: err});
         }
-      return res.view('resourceownerPermission',{userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token});
+      return res.view('resourceownerPermission',{userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
     })
   },
   generateCode: function (req, res) {
@@ -38,7 +39,7 @@ module.exports = {
       if (err) {
         return res.json({err: err});
       }
-      Client.findOne({clientId: clientId}, function (err, client) {
+      Client.find({clientId: clientId}, function (err, client) {
 
         if (err) {
           console.log(err);
@@ -49,9 +50,9 @@ module.exports = {
           return res.status(404).json({err: "Invalid ClientId"});
         }
         else {
-          if (client.redirectURI != redirectURI)
+          if (client[0].redirectURI != redirectURI)
             return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
-          return res.view('redirect',{url:"http://"+client.redirectURI+"?authCode="+jwtService.issue({ id: token1.userId ,clientId:clientId,scopes:client.scopes}),token:token});
+          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.issue({ id: token1.userId ,clientId:clientId,scopes:client[0].scopes}),token:token});
         }
 
       })

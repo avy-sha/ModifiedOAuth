@@ -11,7 +11,7 @@
     $(document).ready(function(){
       $("#btn").click(function(){
         $("#btn").prop("disabled",true);
-        $.ajax({url: "http://localhost:1337/auth",dataType: 'text',
+        $.ajax({url: "<%= domain %>/auth",dataType: 'text',
           type: 'post',
           contentType: 'application/x-www-form-urlencoded',
           data:{userId: $("#userId").val(),password: $("#pwd").val()},
@@ -37,7 +37,7 @@
 <body>
 <div class="container">
 <h2>Resource Owner Authentication</h2>
-<form action="http://localhost:1337/user/permission" method="post" id="myForm">
+<form action="<%= domain %>/user/permission" method="post" id="myForm">
   <div class="form-group">
     <label for="userId">UserId</label>
     <input type="text" class="form-control" id="userId" placeholder="Enter UserId" name="userId">
