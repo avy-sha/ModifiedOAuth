@@ -42,7 +42,26 @@ module.exports.routes = {
   'POST /client/register': {
     controller: 'Client',
     action: 'register'
+  },
+  'POST /user/register': {
+    controller: 'RegisterServerUser',
+    action: 'registerUser'
+  },
+    'GET /user/getcode': {
+  controller: 'AuthorisationCode',
+    action: 'getCodeAuth'
+},
+    'POST /user/permission': {
+  controller: 'AuthorisationCode',
+    action: 'requestPermission'
+},
+  'POST /user/generatecode': {
+    controller: 'AuthorisationCode',
+    action: 'generateCode'
   }
+
+
+
 
 
 

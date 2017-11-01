@@ -1,0 +1,42 @@
+<html>
+<head>
+  <title>M-OAuth2.0 Authentication</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+
+      $("#Accept").click(function(){
+        $("#Accept").prop("disabled",true);
+        $('#myForm').append("<input type='hidden' name='clientId' value='"+
+          "<%= clientId %>"+"' />")
+        $('#myForm').append("<input type='hidden' name='redirectURI' value='"+
+          "<%= redirectURI %>"+"' />")
+        $('#myForm').append("<input type='hidden' name='token' value='"+
+          "<%= token %>"+"' />")
+        $('#myForm').append("<input type='hidden' name='userId' value='"+
+          "<%= userId %>"+"' />")
+        $('#myForm').submit();
+      });
+      $("#Decline").click(function(){
+        $('#myForm').submit();
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="container">
+<h2>Resource Owner Permission</h2>
+  <h3><%= userId %> your permission is required</h3>
+  <h4> Client needs your permission to access data.</h4>
+<form id="myForm" action="http://localhost:1337/user/generatecode" method="post">
+  <button type="button" class="btn btn-default" id="Accept">Accept</button>
+  <button type="button" class="btn btn-default" id="Decline">Decline</button>
+</form>
+</div>
+</body>
+<html>

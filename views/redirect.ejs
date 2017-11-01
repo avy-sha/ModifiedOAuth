@@ -1,0 +1,18 @@
+redirecting...
+<html>
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function(){
+  $('#myForm').append("<input type='hidden' name='token' value='"+
+    "<%= token %>"+"' />")
+  $('#myForm').submit();})
+</script>
+</head>
+<body>
+<div class="container">
+  <form action="<%= url %>" method="post" id="myForm">
+  </form>
+</div>
+</body>
+</html>

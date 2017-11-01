@@ -29,14 +29,12 @@ module.exports = {
         if (!valid) {
           return res.json(401, { err: 'invalid UserId or password' });
         } else {
-          res.json({
+          res.json(200,{
             token: jwtService.issue({ id: userId })});
         }
       });
     })
   }
-
-
 
 };
 

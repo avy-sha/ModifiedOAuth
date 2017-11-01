@@ -50,7 +50,7 @@ module.exports = {
                 bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "OSKbPIYzdbFiXRj/", salt, function (err, clientSecret) {
                   client.clientId = clientId;
                   client.clientSecret = clientSecret;
-                  if (type == "public") {
+                  if (type == "private") {
                     Client.create(client).exec(function (err, Client) {
                       if (err) {
                         console.log(err);
@@ -64,7 +64,7 @@ module.exports = {
                       });
                     });
                   }
-                  else if (type == "private") {
+                  else if (type == "public") {
                     bcrypt.genSalt(12, function (err, salt) {
                       bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "O23@bPIYzdbFiXRj/", salt, function (err, privateURI) {
                         client.privateURI = privateURI;
