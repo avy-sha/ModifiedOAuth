@@ -43,12 +43,9 @@ module.exports = {
           client.domain = domain;
           client.redirectURI = redirectURI;
 
-          bcrypt.genSalt(10, function (err, salt) {
-            bcrypt.hash(Date.now().toString() + "OSKbLgJ/C5XRj/", salt, function (err, clientId) {
-              client.clientId = clientId;
+              client.clientId = jwtService.issue({ name: name , scopes:scopes});
               bcrypt.genSalt(12, function (err, salt) {
                 bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "OSKbPIYzdbFiXRj/", salt, function (err, clientSecret) {
-                  client.clientId = clientId;
                   client.clientSecret = clientSecret;
                   if (type == "private") {
                     Client.create(client).exec(function (err, Client) {
@@ -87,8 +84,6 @@ module.exports = {
                 });
               })
             })
-          })
-        })
       }
     });
   }
