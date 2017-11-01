@@ -32,7 +32,7 @@
 <div class="container">
 <h2>Resource Owner Permission</h2>
   <h3><%= userId %> your permission is required</h3>
-  <h4> Client needs your permission to access data.</h4>
+  <h4> <%= clientName %> needs your permission to access data.</h4>
 <form id="myForm" action="<%= domain %>/user/generatecode" method="post">
   <button type="button" class="btn btn-default" id="Accept">Accept</button>
   <button type="button" class="btn btn-default" id="Decline">Decline</button>

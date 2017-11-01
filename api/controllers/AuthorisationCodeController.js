@@ -18,12 +18,16 @@ module.exports = {
     var clientId = req.param("clientId");
     var redirectURI = req.param("redirectURI");
     var token = req.param("token");
-    jwtService.verify(req, res, function (err, token1) {
+    jwtService.verify(req, "", function (err, token1) {
         if (err) {
           return res.json({err: err});
         }
-      return res.view('resourceownerPermission',{userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
-    })
+        jwtService.verify("", clientId, function (err, client) {
+          if (err) {
+            return res.json({err: "Invalid ClientId"});
+          }
+      return res.view('resourceownerPermission',{clientName:client.name,userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
+    })})
   },
   generateCode: function (req, res) {
     var clientId = req.param("clientId");
@@ -35,7 +39,7 @@ module.exports = {
     if (!clientId || !redirectURI) {
       return res.json(400, {"err": "invalid number of parameters."});
     }
-    jwtService.verify(req, res, function (err, token1) {
+    jwtService.verify(req, "", function (err, token1) {
       if (err) {
         return res.json({err: err});
       }

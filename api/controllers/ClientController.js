@@ -9,7 +9,7 @@ var bcrypt = require('bcrypt');
 module.exports = {
 
   register: function (req, res) {
-    jwtService.verify(req, res, function (err, token) {
+    jwtService.verify(req, "", function (err, token) {
       if (err) {
         return res.json({err: err});
       }
@@ -56,7 +56,7 @@ module.exports = {
                       res.status(200).json({
                         userId: userId,
                         scopes: scopes,
-                        clientId: clientId,
+                        clientId: client.clientId,
                         clientSecret: clientSecret
                       });
                     });
@@ -73,7 +73,7 @@ module.exports = {
                           res.status(200).json({
                             userId: userId,
                             scopes: scopes,
-                            clientId: clientId,
+                            clientId: client.clientId,
                             clientSecret: clientSecret,
                             privateURI: privateURI
                           });

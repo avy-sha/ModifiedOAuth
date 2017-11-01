@@ -30,10 +30,9 @@ module.exports.issue = function(payload) {
  */
 // Verifies token on a request
 module.exports.verify = function(req,token, callback) {
-  var token;
  // callback(new Error({err: 'Format is Authorization: Bearer [token]'}));
-
-  if (req.headers && req.headers.authorization) {
+  if(token);
+  else if (req.headers && req.headers.authorization) {
     var parts = req.headers.authorization.split(' ');
     if (parts.length == 2) {
       var scheme = parts[0],
