@@ -58,7 +58,9 @@ module.exports.routes = {
   'POST /user/generatecode': {
     controller: 'AuthorisationCode',
     action: 'generateCode'
-  }
+  },
+
+
 
 
 

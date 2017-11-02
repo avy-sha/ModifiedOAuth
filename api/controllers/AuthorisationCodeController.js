@@ -11,6 +11,7 @@ module.exports = {
   getCodeAuth:function(req,res){
     var clientId = req.param("clientId");
     var redirectURI = req.param("redirectURI");
+
     return res.view('resourceownerAuthentication',{clientId:clientId,redirectURI:redirectURI,domain:conf.domain});
   },
   //Only for authorisation code grant.
@@ -26,7 +27,7 @@ module.exports = {
           if (err) {
             return res.json({err: "Invalid ClientId"});
           }
-      return res.view('resourceownerPermission',{clientName:client.name,userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
+          return res.view('resourceownerPermission',{clientName:client.name,userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
     })})
   },
   generateCode: function (req, res) {
@@ -50,13 +51,13 @@ module.exports = {
           return res.serverError(err);
         }
 
-        if (!client) {
+        if (!client[0]) {
           return res.status(404).json({err: "Invalid ClientId"});
         }
         else {
           if (client[0].redirectURI != redirectURI)
             return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
-          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.issue({ id: token1.userId ,clientId:clientId,scopes:client[0].scopes}),token:token});
+          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.randomIssue({ id: token1.userId ,clientId:clientId,scopes:client[0].scopes},1440000),token:token});
         }
 
       })

@@ -23,6 +23,14 @@ module.exports.issue = function(payload) {
     tokenSecret
   );
 };
+module.exports.randomIssue = function(payload,timeDiff) {
+  payload.iat = Date.now();
+  payload.exp = payload.iat+timeDiff;
+  return jwt.sign(
+    payload,
+    tokenSecret
+  );
+};
 /**
  * Verifies token on a request
  * @param {object} token - jwt which is to be verified
@@ -31,7 +39,7 @@ module.exports.issue = function(payload) {
 // Verifies token on a request
 module.exports.verify = function(req,token, callback) {
  // callback(new Error({err: 'Format is Authorization: Bearer [token]'}));
-  if(token);
+  if(token){}
   else if (req.headers && req.headers.authorization) {
     var parts = req.headers.authorization.split(' ');
     if (parts.length == 2) {
@@ -48,7 +56,6 @@ module.exports.verify = function(req,token, callback) {
     token = req.param('token');
     // We delete the token from param to not mess with blueprints
     delete req.query.token;
-
   } else {
     return callback('Format is Authorization: Bearer [token]');
   }
