@@ -59,6 +59,10 @@ module.exports.routes = {
     controller: 'AuthorisationCode',
     action: 'generateCode'
   },
+  'POST /user/generateToken': {
+    controller: 'AccessToken',
+    action: 'generateToken'
+  }
 
 
 

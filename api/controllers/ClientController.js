@@ -42,8 +42,9 @@ module.exports = {
           client.name = name;
           client.domain = domain;
           client.redirectURI = redirectURI;
+          client.type = type;
 
-              client.clientId = jwtService.randomIssue({ name: name , scopes:scopes},31536000000);
+              client.clientId = jwtService.randomIssue({ name: name , scopes:scopes, type:type},31536000000);
               bcrypt.genSalt(12, function (err, salt) {
                 bcrypt.hash((Math.floor(Math.random() * (Number.MAX_SAFE_INTEGER) + Date.now())) + Date.now().toString() + "OSKbPIYzdbFiXRj/", salt, function (err, clientSecret) {
                   client.clientSecret = clientSecret;

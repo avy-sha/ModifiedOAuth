@@ -27,13 +27,14 @@ module.exports = {
           if (err) {
             return res.json({err: "Invalid ClientId"});
           }
-          return res.view('resourceownerPermission',{clientName:client.name,userId:token1.id,clientId:clientId,redirectURI:redirectURI,token:token,domain:conf.domain});
+          return res.view('resourceownerPermission',{clientName:client.name,userId:token1.id,clientId:clientId,redirectURI:redirectURI,type:client.type,token:token,domain:conf.domain});
     })})
   },
   generateCode: function (req, res) {
     var clientId = req.param("clientId");
     var redirectURI = req.param("redirectURI");
     var token = req.param("token");
+    var type= req.param("type");
     if(!token){
       return res.json(400, {"err": "Permission denied"});
     }
@@ -57,7 +58,11 @@ module.exports = {
         else {
           if (client[0].redirectURI != redirectURI)
             return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
-          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.randomIssue({ id: token1.userId ,clientId:clientId,scopes:client[0].scopes},1440000),token:token});
+          if(type == 'public'){
+            return res.view('redirect',{url:"http://"+client[0].redirectURI+"#accessToken="+jwtService.randomIssue({ id: token1.id ,clientId:clientId,scopes:client[0].scopes},1440000),token:token});
+          }
+          else
+          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.randomIssue({ id: token1.id ,clientId:clientId,scopes:client[0].scopes,type:type},1440000),token:token});
         }
 
       })

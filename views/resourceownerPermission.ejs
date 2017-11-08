@@ -20,6 +20,8 @@
           "<%= token %>"+"' />")
         $('#myForm').append("<input type='hidden' name='userId' value='"+
           "<%= userId %>"+"' />")
+        $('#myForm').append("<input type='hidden' name='type' value='"+
+          "<%= type %>"+"' />")
         $('#myForm').submit();
       });
       $("#Decline").click(function(){

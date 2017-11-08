@@ -6,41 +6,45 @@
  */
 
 module.exports = {
-  generate: function (req, res) {
-    var email = req.param("email");
-    var scope = req.param("scope");
-    //scope can be of enum types.
-    //The use of Scope in an OAuth2 application ised from  often key to proper permissioning. Scope is used to limit the authorization granted to the client by the resource owner
-    //will depend on the type of application using the OAuth module.
-    scope = "admin";
-    email = "abhinav@gmail.com";
+  generateToken: function (req, res) {
 
-    //TODO: Notify the frontend to tell the user that the allotted api key will be only displayed once per email(and once scopes allotted cannot be changed for a specific email)
-
-    var key = apiKeyService.encryptApiKey(scope, email);
-    User.findOne({email: email}, function (err, user) {
-
+var authCode = req.param("authCode");
+var clientId = req.param("clientId");
+var clientSecret = req.param("clientSecret");
+var redirectURI =  req.param("redirectURI");
+var token=req.param("token");
+    jwtService.verify(req, "", function (err, token) {
       if (err) {
-        console.log(err);
-        return res.serverError(err);
+        return res.json({err: err});
       }
+      jwtService.verify("", authCode, function (err, authToken){
+        if (err) {
+          return res.json({err: err});
+        }
+        if(authToken.clientId!=clientId){
+          return res.json({err: "client ids do not match."});
+        }
+        if(authToken.id!=token.id){
+          return res.json({err: "user ids do not match."});
+        }
+        Client.find({clientId: clientId}, function (err, client) {
 
-      if (user) {
-        return res.status(409).json({err: "conflict:User already exists"});
-      }
-      else {
-        user = {};
-        user.email = email;
-        user.scope = scope;
-        /*  user.save(function (err) {
-         if (err)
-         return res.serverError(err);
-         console.log('new user has been created');
-         });*/
-        res.status(200).json({email: email, scope: scope, key: key});
-      }
+          if (err) {
+            console.log(err);
+            return res.serverError(err);
+          }
 
-    })
+          if (!client[0]) {
+            return res.status(404).json({err: "Invalid ClientId"});
+          }
+          if (client[0].redirectURI != redirectURI)
+            return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
+          if(client[0].clientSecret != clientSecret)
+            return res.status(400).json({err: "Unable to authenticate client application."});
+          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?accessToken="+jwtService.randomIssue({ id: token.id ,clientId:clientId,scopes:client[0].scopes},14400000),token:token});
+        })
+      });
+    });
   }
 };
 
