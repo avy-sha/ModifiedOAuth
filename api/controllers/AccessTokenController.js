@@ -41,7 +41,8 @@ var token=req.param("token");
             return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
           if(client[0].clientSecret != clientSecret)
             return res.status(400).json({err: "Unable to authenticate client application."});
-          return res.view('redirect',{url:"http://"+client[0].redirectURI+"?accessToken="+jwtService.randomIssue({ id: token.id ,clientId:clientId,scopes:client[0].scopes},14400000),token:token});
+         // return res.view('redirect',{url:"http://"+client[0].redirectURI+"?accessToken="+jwtService.randomIssue({ id: token.id ,clientId:clientId,scopes:client[0].scopes},14400000),token:token});
+            return res.json(200,{accessToken:jwtService.randomIssue({ id: token.id ,clientId:clientId,scopes:client[0].scopes},14400000)});
         })
       });
     });

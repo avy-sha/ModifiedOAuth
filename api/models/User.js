@@ -17,7 +17,9 @@ module.exports = {
     password:{
       type:"string",
       required: true
-    }
+    },
+    Address:{type: 'string'},Email:{type: 'string'},Phoneno:{type: 'string'},Profilepic:{type: 'string'},Sex:{type: 'string'}
+
 
   },
   comparePassword: function(password, user, cb) {

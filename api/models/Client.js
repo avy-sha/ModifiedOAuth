@@ -40,7 +40,6 @@ module.exports = {
     privateURI:{
       type: 'string'
     }
-
   }
 };
 
