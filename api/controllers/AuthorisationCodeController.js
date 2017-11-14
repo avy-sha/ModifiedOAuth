@@ -59,7 +59,7 @@ module.exports = {
           if (client[0].redirectURI != redirectURI)
             return res.status(400).json({err: "redirect uri not same as registered redirect uri"});
           if(type == 'public'){
-            return res.view('redirect',{url:"http://"+client[0].redirectURI+"#accessToken="+jwtService.randomIssue({ id: token1.id ,clientId:clientId,scopes:client[0].scopes},1440000),token:token});
+            return res.view('redirectImplicit',{url:"http://"+client[0].redirectURI+"#accessToken="+jwtService.randomIssue({ id: token1.id ,clientId:clientId,scopes:client[0].scopes},1440000)+"&token="+token});
           }
           else
           return res.view('redirect',{url:"http://"+client[0].redirectURI+"?authCode="+jwtService.randomIssue({ id: token1.id ,clientId:clientId,scopes:client[0].scopes,type:type},1440000),token:token});
